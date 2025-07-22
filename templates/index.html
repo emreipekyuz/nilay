@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nilay | Nilüfer Gençlik Destek</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>✨ Nilay | Gençlik Destek ✨</h2>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="chat-message bot">Selam! Ben Nilay. Nilüfer'deki etkinlikler, projeler ve aklına takılan her şey için buradayım. Hadi sohbet edelim! 🤙</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Bir şeyler yaz..." autocomplete="off">
+            <button id="send-btn">Gönder</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        function addMessage(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.innerText = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = userInput.value;
+            if (message.trim() === '') return;
+
+            addMessage(message, 'user');
+            userInput.value = '';
+            userInput.focus();
+
+            const response = await fetch('/mesaj', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+            addMessage(data.response, 'bot');
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
