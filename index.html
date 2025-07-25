@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Chat Uygulaması</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Mini Chat</h2>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="chat-message bot">Merhaba! Size nasıl yardımcı olabilirim?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Mesajınızı yazın..." />
+            <button id="send-btn">Gönder</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.textContent = message;
+            chatBox.appendChild(userMsg);
+
+            // Basit bot cevabı
+            const botMsg = document.createElement('div');
+            botMsg.className = 'chat-message bot';
+            botMsg.textContent = 'Bunu daha sonra cevaplayacağım!';
+            chatBox.appendChild(botMsg);
+
+            userInput.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
